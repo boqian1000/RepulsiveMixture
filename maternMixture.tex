@@ -1,0 +1,159 @@
+\documentclass[12pt]{article}
+\usepackage{graphicx,psfrag,epsf}
+\usepackage{enumerate}
+\usepackage{natbib}
+\usepackage{bbm}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{float}
+\usepackage{amsthm}
+\usepackage{xcolor}
+\usepackage{amssymb,mathabx}
+\usepackage{algorithm, algpseudocode}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\newtheorem{theorem}{Theorem}
+\newtheorem{assumption}{Assumption}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newcommand{\blind}{0}
+\addtolength{\oddsidemargin}{-.75in}%
+\addtolength{\evensidemargin}{-.75in}%
+\addtolength{\textwidth}{1.5in}%
+\addtolength{\textheight}{1.3in}%
+\addtolength{\topmargin}{-.8in}%
+
+\input{mymacros.tex}
+
+\begin{document}
+
+
+%\bibliographystyle{plain}
+
+\def\spacingset#1{\renewcommand{\baselinestretch}%
+{#1}\small\normalsize} \spacingset{1}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\if0\blind
+{
+  \title{\bf Repulsive Mixture Model}
+  \author{  
+   %  Vinayak Rao\thanks{
+    %The authors gratefully acknowledge}\hspace{.2cm}\\
+    %Department of Statistics, Purdue University\\
+    %and \\
+    Boqian Zhang \\
+    Department of Statistics, Purdue University\\
+    Vinayak Rao\\
+    Department of Statistics, Purdue University\\
+    }
+  \maketitle
+} \fi
+
+\if1\blind
+{
+  \bigskip
+  \bigskip
+  \bigskip
+  \begin{center}
+    {\LARGE\bf Title}
+\end{center}
+  \medskip
+} \fi
+
+\bigskip
+\begin{abstract}
+\spacingset{1.45}
+\end{abstract}
+
+\section{Update label}
+Define $G_+^1$ as the set of observed matern events, $G_+^2$ as the set of unobserved matern events. $G_+ = G_+^1 \cup G_+^2$.$\tilde{G}_+$ is the set of thinned events. $F_+ = G_+^1 \cup G_+^2 \cup \tilde{G}_+$. The following gives the conditional probability $P(G_+^1, G_+^2, \tilde{G}_+ | F_+)$.
+\begin{align*}
+P(G_+^1, G_+^2, \tilde{G}_+ | F_+) &= \prod_{\tilde{g}_+ \in \tilde{G}_+} \mH (\tilde{g}_+ ; G_+) \prod_{g_+ \in G_+} ( 1-\mH (g_+ ; G_+) )\\
+& = \prod_{\tilde{g}_+ \in \tilde{G}_+} \mH (\tilde{g}_+ ; G_+) \prod_{g^1_+ \in G^1_+} ( 1- \mH (g_+ ; G_+) ) \prod_{g^2_+ \in G^2_+} ( 1- \mH (g_+ ; G_+) )
+\end{align*}
+
+\begin{align*}
+P(G_+^1, G_+^2, \tilde{G}_+ | F_+) &= \prod_{\tilde{g}_+ \in \tilde{G}_+} \mH (\tilde{g}_+ ; G_+) \prod_{g_+ \in G_+} ( 1-\mH (g_+ ; G_+) )\\
+& = \prod_{\tilde{g}_+ \in \tilde{G}_+} \mH (\tilde{g}_+ ; G_+) \prod_{g^1_+ \in G^1_+} ( 1- \mH (g_+^1 ; G_+) ) \prod_{g^2_+ \in G^2_+} ( 1- \mH (g_+^2 ; G_+) )
+\end{align*}
+
+\begin{align*}
+\prod_{\tilde{g}_+ \in \tilde{G}_+} \mH (\tilde{g}_+ ; G_+) &= \prod_{\tilde{g}_+ \in \tilde{G}_+} \left[ 1 -        \prod_{g_+ \in G_+}  (1 - \mH (\tilde{g}_+ ; g_+) ) \right]
+&= \prod_{(\tilde{s}, \tilde{t}) \in \tilde{G}_+} \left[ 1 - \prod_{(s, t) \in G_+}  (1 - \mathbbm{1}_{\{ \tilde{t} > t \} } K(\tilde{s}, s)) \right]
+\end{align*}
+
+\begin{align*}
+\prod_{g^1_+ \in G^1_+} ( 1- \mH (g_+^1 ; G_+) ) &= \prod_{g^1_+ \in G^1_+} \prod_{g_+ \in G_+} ( 1- \mH (g_+^1 ; g_+) ) \\ 
+&= \left[ \prod_{g^1_+ \in G^1_+} \prod_{g^{1'}_+ \in G^1_+} ( 1- \mH (g_+^1 ; g^{1'}_+) ) \right] \cdot 
+ \left[ \prod_{g^1_+ \in G^1_+} \prod_{g^2_+ \in G^2_+} ( 1- \mH (g_+^1 ; g^2_+) ) \right]
+\end{align*}
+
+\begin{align*}
+\prod_{g^2_+ \in G^2_+} ( 1- \mH (g_+^2 ; G_+) ) &= \prod_{g^2_+ \in G^2_+} \prod_{g_+ \in G_+} ( 1- \mH (g_+^2 ; g_+) ) \\ 
+&= \left[ \prod_{g^2_+ \in G^2_+} \prod_{g^{2'}_+ \in G^2_+} ( 1- \mH (g_+^2 ; g^{2'}_+) ) \right] \cdot 
+ \left[ \prod_{g^2_+ \in G^2_+} \prod_{g^1_+ \in G^1_+} ( 1- \mH (g_+^2 ; g^1_+) ) \right]
+\end{align*}
+
+
+\begin{align*}
+P(G_+^1, G_+^2, \tilde{G}_+ | F_+) &= \left[ \prod_{g^1_+ \in G^1_+} \prod_{g^{1'}_+ \in G^1_+} ( 1- \mH (g_+^1 ; g^{1'}_+) ) \right] \cdot \left[ \prod_{g^2_+ \in G^2_+} \prod_{g^{2'}_+ \in G^2_+} ( 1- \mH (g_+^2 ; g^{2'}_+) ) \right] \\ 
+&\cdot 
+ \left[ \prod_{g^1_+ \in G^1_+} \prod_{g^2_+ \in G^2_+} ( 1- \mH (g_+^1 ; g^2_+) ) \right] \cdot 
+ \left[ \prod_{g^2_+ \in G^2_+} \prod_{g^1_+ \in G^1_+} ( 1- \mH (g_+^2 ; g^1_+) ) \right] \\  
+&\cdot \prod_{\tilde{g}_+ \in \tilde{G}_+} \mH (\tilde{g}_+ ; G_+)\\
+&= \left[ \prod_{g^1_+ \in G^1_+} \prod_{g^{1'}_+ \in G^1_+} ( 1- \mH (g_+^1 ; g^{1'}_+) ) \right] \cdot \left[ \prod_{g^2_+ \in G^2_+} \prod_{g^{2'}_+ \in G^2_+} ( 1- \mH (g_+^2 ; g^{2'}_+) ) \right] \\ 
+&\cdot  
+\left[ \prod_{g^1_+ \in G^1_+} \prod_{g^2_+ \in G^2_+} ( 1- \mH (g_+^1 ; g^2_+) )( 1- \mH (g_+^2 ; g^1_+) )  \right] \cdot \prod_{\tilde{g}_+ \in \tilde{G}_+} \mH (\tilde{g}_+ ; G_+)
+\end{align*}
+
+\begin{align*}
+\prod_{g^1_+ \in G^1_+} \prod_{g^2_+ \in G^2_+} ( 1- \mH (g_+^1 ; g^2_+) )( 1- \mH (g_+^2 ; g^1_+) ) &= \prod_{(s_1, t_1) \in G^1_+} \prod_{(s_2, t_2) \in G^2_+} (1 - \mathbbm{1}_{\{ t_1 > t_2\}} K(s_1, s_2)) (1 - \mathbbm{1}_{\{ t_2 > t_1\}} K(s_2, s_1))  \\
+&= \prod_{(s_1, t_1) \in G^1_+} \prod_{(s_2, t_2) \in G^2_+} (1 - \mathbbm{1}_{\{ t_1 \neq t_2\}} K(s_1, s_2))
+\end{align*}
+
+\begin{align*}
+\left[ \prod_{g^2_+ \in G^2_+} \prod_{g^{2'}_+ \in G^2_+} ( 1- \mH (g_+^2 ; g^{2'}_+) ) \right]^2 &= \left[ \prod_{g^2_+ \in G^2_+} \prod_{g^{2'}_+ \in G^2_+} ( 1- \mH (g_+^2 ; g^{2'}_+) ) \right] \cdot 
+\left[ \prod_{g^{2'}_+ \in G^2_+} \prod_{g^2_+ \in G^2_+} ( 1- \mH ( g^{2'}_+ ; g_+^2) ) \right] \\
+&= \prod_{g^2_+ \in G^2_+} \prod_{g^{2'}_+ \in G^2_+} ( 1- \mH (g_+^2 ; g^{2'}_+) ) ( 1- \mH ( g^{2'}_+ ; g_+^2) ) \\
+&= \prod_{(s_2, t_2) \in G^2_+} \prod_{(s'_2, t'_2)+ \in G^2_+} \left( 1- \mathbbm{1}_{\{ t_2 \neq t'_2 \}} K(s_2, s'_2) \right)
+\end{align*}
+Thus we have the following.
+
+\begin{align*}
+P(G_+^1, G_+^2, \tilde{G}_+ | F_+) &= \left[ \prod_{g^1_+ \in G^1_+} \prod_{g^{1'}_+ \in G^1_+} ( 1- \mH (g_+^1 ; g^{1'}_+) ) \right] \cdot \left[ \prod_{(s_2, t_2) \in G^2_+} \prod_{(s'_2, t'_2)+ \in G^2_+} \left( 1- \mathbbm{1}_{\{ t_2 \neq t'_2 \}} K(s_2, s'_2) \right)^{\frac{1}{2}} \right] \\
+&\cdot \left[ \prod_{(s_1, t_1) \in G^1_+} \prod_{(s_2, t_2) \in G^2_+} \left(1 - \mathbbm{1}_{\{ t_1 \neq t_2\}} K(s_1, s_2)\right)\right] \cdot \prod_{(\tilde{s}, \tilde{t}) \in \tilde{G}_+} \left[ 1 - \prod_{(s, t) \in G_+}  \left(1 - \mathbbm{1}_{\{ \tilde{t} > t \} } K(\tilde{s}, s)\right) \right]
+\end{align*}
+Now we need determine the label of a event $f = (s, t)$. There are in total 4 parts, $G_+^1$, $G_+^2$, $\tilde{G}_+$, $f$. 
+\begin{align}
+P(f \text{ belongs to }G_+^2 | F_+ \cup \{f\}, G_+^1) \propto  P(G_+^1, G_+^2 \cup \{f\}, \tilde{G}_+ | F_+)\\
+P(f \text{ belongs to }\tilde{G}_+ | F_+ \cup \{f\}, G_+^1) \propto P(G_+^1, G_+^2, \tilde{G}_+ \cup \{f\}| F_+)
+\end{align}
+\begin{align*}
+P(G_+^1, G_+^2 &\cup \{f\}, \tilde{G}_+ | F_+) \\&= \left[ \prod_{g^1_+ \in G^1_+} \prod_{g^{1'}_+ \in G^1_+} ( 1- \mH (g_+^1 ; g^{1'}_+) ) \right] \\
+&\cdot \prod_{(s_1, t_1) \in G_+^1} \left[  \prod_{(s_2, t_2) \in G_+^2} (1 - K(s_1, s_2) \mathbbm{1}_{\{t_1 \neq t_2 \}}) \cdot (1 - K(s_1, s)\mathbbm{1}_{\{t_1 \neq t \}} ) \right] \\ &\cdot  \left[ \prod_{(s_2, t_2) \in G^2_+} \prod_{(s'_2, t'_2)+ \in G^2_+} \left( 1- \mathbbm{1}_{\{ t_2 \neq t'_2 \}} K(s_2, s'_2) \right)^{\frac{1}{2}} \right] \\
+&\cdot \prod_{(s_2, t_2) \in G_+^2} \left( 1 - K(s_2, s) \mathbbm{1}_{\{t_2 \neq t\}} \right) \\
+&\cdot \prod_{(\tilde{s}, \tilde{t}) \in \tilde{G}_+} \left[ 1 - \prod_{(s', t') \in G_+}  \left(1 - \mathbbm{1}_{\{ \tilde{t} > t' \} } K(\tilde{s}, s')\right) (1 - \mathbbm{1}_{\{ \tilde{t} > t\}}K(\tilde{s}, s)) \right] \\
+& = \left[ \prod_{g^1_+ \in G^1_+} \prod_{g^{1'}_+ \in G^1_+} ( 1- \mH (g_+^1 ; g^{1'}_+) ) \right]
+\left[ \prod_{(s_1, t_1) \in G_+^1}  \prod_{(s_2, t_2) \in G_+^2} (1 - K(s_1, s_2) \mathbbm{1}_{\{t_1 \neq t_2 \}})\right] \\
+&\cdot \left[ \prod_{(s_2, t_2) \in G^2_+} \prod_{(s'_2, t'_2)+ \in G^2_+} \left( 1- \mathbbm{1}_{\{ t_2 \neq t'_2 \}} K(s_2, s'_2) \right)^{\frac{1}{2}} \right] \\
+&\cdot  \prod_{(s_1, t_1) \in G_+^1} \left(1 - K(s_1, s)\mathbbm{1}_{\{t_1 \neq t \}} \right) \cdot \prod_{(s_2, t_2) \in G_+^2} \left( 1 - K(s_2, s) \mathbbm{1}_{\{t_2 \neq t\}} \right)  \\
+&\cdot \prod_{(\tilde{s}, \tilde{t}) \in \tilde{G}_+} \left[ 1 - \prod_{(s', t') \in G_+}  \left(1 - \mathbbm{1}_{\{ \tilde{t} > t' \} } K(\tilde{s}, s')\right) (1 - \mathbbm{1}_{\{ \tilde{t} > t\}}K(\tilde{s}, s)) \right] \\
+& = \left[ \prod_{g^1_+ \in G^1_+} \prod_{g^{1'}_+ \in G^1_+} ( 1- \mH (g_+^1 ; g^{1'}_+) ) \right]
+\left[ \prod_{(s_1, t_1) \in G_+^1}  \prod_{(s_2, t_2) \in G_+^2} (1 - K(s_1, s_2) \mathbbm{1}_{\{t_1 \neq t_2 \}})\right] \\
+&\cdot \left[ \prod_{(s_2, t_2) \in G^2_+} \prod_{(s'_2, t'_2)+ \in G^2_+} \left( 1- \mathbbm{1}_{\{ t_2 \neq t'_2 \}} K(s_2, s'_2) \right)^{\frac{1}{2}} \right] \\
+&\cdot  \prod_{(s', t') \in G_+} \left(1 - K(s', s)\mathbbm{1}_{\{t' \neq t \}} \right) \cdot \prod_{(\tilde{s}, \tilde{t}) \in \tilde{G}_+} \left[ 1 - \prod_{(s', t') \in G_+}  \left(1 - \mathbbm{1}_{\{ \tilde{t} > t' \} } K(\tilde{s}, s')\right) (1 - \mathbbm{1}_{\{ \tilde{t} > t\}}K(\tilde{s}, s)) \right]
+\end{align*}
+
+\begin{align*}
+P(G_+^1, G_+^2 , \tilde{G}_+&\cup \{f\} | F_+) \\
+& = \left[ \prod_{g^1_+ \in G^1_+} \prod_{g^{1'}_+ \in G^1_+} ( 1- \mH (g_+^1 ; g^{1'}_+) ) \right]
+\left[ \prod_{(s_1, t_1) \in G_+^1}  \prod_{(s_2, t_2) \in G_+^2} (1 - K(s_1, s_2) \mathbbm{1}_{\{t_1 \neq t_2 \}})\right] \\
+&\cdot \left[ \prod_{(s_2, t_2) \in G^2_+} \prod_{(s'_2, t'_2)+ \in G^2_+} \left( 1- \mathbbm{1}_{\{ t_2 \neq t'_2 \}} K(s_2, s'_2) \right)^{\frac{1}{2}} \right] \\
+&\cdot \prod_{(\tilde{s}, \tilde{t}) \in \tilde{G}_+} \left[ 1 - \prod_{(s', t') \in G_+}  \left(1 - \mathbbm{1}_{\{ \tilde{t} > t' \} } K(\tilde{s}, s')\right)  \right] \cdot \left[ 1 - \prod_{(s', t') \in G_+}  \left(1 - \mathbbm{1}_{\{ t > t' \} } K(s, s')\right)  \right] \\
+\end{align*}
+
+
+\end{document}
